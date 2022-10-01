@@ -5,19 +5,16 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.sharp.Schedule
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.kwemrj.pillreminder.core.enums.TakeStatus
@@ -29,9 +26,11 @@ import java.util.*
 @Composable
 fun ReminderItems(
     modifier: Modifier = Modifier,
-    remindersList : List<ReminderWithMedication>,
-    selectedReminder : (ReminderWithMedication) -> Unit
+    remindersList: List<ReminderWithMedication>,
+    selectedReminder: (ReminderWithMedication) -> Unit
 ) {
+
+    val context = LocalContext.current
     LazyColumn(
         modifier = modifier
 
@@ -43,7 +42,9 @@ fun ReminderItems(
                     .height(IntrinsicSize.Min)
                     .background(Color(0xFFffffff), shape = RoundedCornerShape(8.dp))
                     .clip(RoundedCornerShape(8.dp))
-                    .clickable { selectedReminder(reminder) }
+                    .clickable {
+                        selectedReminder(reminder)
+                    }
             ) {
                 Column(
                     modifier = Modifier
@@ -92,7 +93,8 @@ fun ReminderItems(
                 Spacer(modifier = Modifier.weight(1f))
 
                 Column(
-                    modifier = Modifier.fillMaxHeight()
+                    modifier = Modifier
+                        .fillMaxHeight()
                         .padding(end = 8.dp),
                     verticalArrangement = Arrangement.Center
                 ) {
@@ -100,7 +102,11 @@ fun ReminderItems(
                         text = SimpleDateFormat("hh:mm a", Locale.getDefault()).format(
                             reminder.time
                         ),
-                        modifier = Modifier.background(color = Color(0xFF98D9FC), shape = RoundedCornerShape(8.dp))
+                        modifier = Modifier
+                            .background(
+                                color = Color(0xFF98D9FC),
+                                shape = RoundedCornerShape(8.dp)
+                            )
                             .padding(horizontal = 6.dp, vertical = 2.dp)
                     )
                 }

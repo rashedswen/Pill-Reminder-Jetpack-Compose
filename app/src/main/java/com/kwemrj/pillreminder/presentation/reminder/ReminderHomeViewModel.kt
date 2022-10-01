@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kwemrj.pillreminder.core.enums.TakeStatus
 import com.kwemrj.pillreminder.data.local.entity.ReminderEntity
-import com.kwemrj.pillreminder.domain.model.Reminder
 import com.kwemrj.pillreminder.domain.use_cases.MedicationUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -22,9 +21,6 @@ class ReminderHomeViewModel @Inject constructor(
     private val _state = MutableStateFlow(ReminderHomeStates())
     val state: StateFlow<ReminderHomeStates> = _state
 
-    private val _reminderList = mutableStateListOf<Reminder>()
-    val reminderList: List<Reminder> = _reminderList
-
     private val _listOfDays = mutableStateListOf<Long>()
     val listOfDays: List<Long> = _listOfDays
 
@@ -39,6 +35,7 @@ class ReminderHomeViewModel @Inject constructor(
         }
         daysList()
         getReminderListForDay()
+        changeOldRemindersToMissed()
     }
 
     fun onEvent(event: ReminderHomeEvents) {
@@ -75,6 +72,31 @@ class ReminderHomeViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun changeOldRemindersToMissed() {
+        useCases.getDrugWithReminderListUseCase()
+            .onEach { listOfReminders ->
+                listOfReminders.filter { it.time <= Calendar.getInstance().timeInMillis }
+                    .forEach { reminder ->
+                        if (reminder.takeStatus == TakeStatus.Pending) {
+                            viewModelScope.launch {
+                                val reminderEntity = ReminderEntity(
+                                    id = reminder.reminderId,
+                                    pill_id = reminder.drugId,
+                                    time = reminder.time,
+                                    takeStatus = reminder.takeStatus
+                                )
+                                useCases.updateReminderUseCase(
+                                    reminder = reminderEntity.copy(
+                                        takeStatus = TakeStatus.Missed
+                                    )
+                                )
+                            }
+                        }
+                    }
+            }.launchIn(viewModelScope)
+
     }
 
     private fun getReminderListForDay() {

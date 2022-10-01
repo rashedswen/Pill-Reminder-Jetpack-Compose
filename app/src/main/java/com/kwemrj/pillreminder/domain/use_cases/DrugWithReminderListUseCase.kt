@@ -6,12 +6,12 @@ import com.kwemrj.pillreminder.domain.repository.PillRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class GetDrugWithReminderListUseCase(
+class DrugWithReminderListUseCase(
     private val repository: PillRepository
 ) {
 
-    operator fun invoke(): Flow<List<ReminderWithMedication>> {
-        return repository.getListOfMedicationsWithReminders()
+    suspend operator fun invoke(): List<ReminderWithMedication> {
+        return repository.listOfMedicationsWithReminders()
     }
 
 }

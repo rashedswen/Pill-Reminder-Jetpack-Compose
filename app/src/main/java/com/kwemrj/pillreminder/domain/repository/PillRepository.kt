@@ -18,6 +18,8 @@ interface PillRepository {
 
     fun getListOfMedicationsWithReminders() :Flow<List<ReminderWithMedication>>
 
+    suspend fun listOfMedicationsWithReminders() :List<ReminderWithMedication>
+
     suspend fun getReminder(id : Int): ReminderEntity
 
     suspend fun updateReminder(reminder : ReminderEntity)

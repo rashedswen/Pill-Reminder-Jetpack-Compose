@@ -1,6 +1,7 @@
 package com.kwemrj.pillreminder.presentation.add_reminder
 
 import com.kwemrj.pillreminder.core.enums.MedicationForm
+import com.kwemrj.pillreminder.data.local.entity.ReminderWithMedication
 import com.kwemrj.pillreminder.presentation.add_reminder.util.IntervalInTimes
 
 data class AddReminderStates(
@@ -12,5 +13,6 @@ data class AddReminderStates(
     val endDate: Long? = null,
     val intervalBetweenDoses : String = "",
     val times : List<Long> = listOf(),
+    val drugReminders : List<ReminderWithMedication> = listOf(),
     val intervalInTimes: IntervalInTimes = IntervalInTimes.EveryXHour,
 )

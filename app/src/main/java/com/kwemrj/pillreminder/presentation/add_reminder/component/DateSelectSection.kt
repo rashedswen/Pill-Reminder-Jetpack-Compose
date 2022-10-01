@@ -20,7 +20,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.roundToInt
 
 @Composable
 fun DateSelectSection(
@@ -176,8 +175,10 @@ fun CustomCalendarView(onDateChange: (Long) -> Unit, startDate: Long?) {
             }
             view.setOnDateChangeListener { _, year, month, dayOfMonth ->
                 val calendar = Calendar.getInstance()
-                calendar.set(year, month, dayOfMonth)
+                calendar.set(year, month, dayOfMonth, 0, 0, 0)
+                calendar.set(Calendar.MILLISECOND, 0)
                 onDateChange(calendar.timeInMillis)
+                Log.d("Time Calendar", calendar.timeInMillis.toString())
             }
         }
     )
@@ -220,29 +221,3 @@ fun CustomDatePickerField(
     )
 
 }
-
-
-fun extractNumber( num: Int,  nums: MutableList<Int>):MutableList<Int> {
-    // write your code here
-    val listOfNumbersModified = mutableListOf<Int>()
-    val listOfNotExactNumbers = mutableListOf<Int>()
-    val listOfExactNumbers = mutableListOf<Int>()
-
-    nums.forEach {
-        if(it != num){
-            listOfNotExactNumbers.add(it)
-        }
-        if(it == num){
-            listOfExactNumbers.add(it)
-        }
-    }
-    listOfNumbersModified.addAll(listOfNotExactNumbers)
-    listOfNumbersModified.addAll(listOfExactNumbers)
-    return listOfNumbersModified
-}
-
-
-fun main() {
-    print(extractNumber(2,mutableListOf<Int>(2,4,2)))
-}
-

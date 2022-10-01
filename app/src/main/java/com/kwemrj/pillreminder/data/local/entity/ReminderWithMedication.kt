@@ -2,6 +2,7 @@ package com.kwemrj.pillreminder.data.local.entity
 
 import com.kwemrj.pillreminder.core.enums.MedicationForm
 import com.kwemrj.pillreminder.core.enums.TakeStatus
+import java.io.Serializable
 
 data class ReminderWithMedication(
     val drugId : Int,
@@ -10,4 +11,4 @@ data class ReminderWithMedication(
     val takeStatus : TakeStatus,
     val medicationForm: MedicationForm,
     val time : Long
-)
+) : Serializable

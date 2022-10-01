@@ -42,6 +42,14 @@ interface PillDao {
                 "ON MedicationEntity.id = ReminderEntity.pill_id"
     )
     fun getDrugWithReminderList(): Flow<List<ReminderWithMedication>>
+    @Query(
+        "SELECT MedicationEntity.id as drugId, MedicationEntity.name as drugName, " +
+                "ReminderEntity.id as reminderId, ReminderEntity.takeStatus as takeStatus,  " +
+                "ReminderEntity.time as time , MedicationEntity.form as medicationForm " +
+                "FROM ReminderEntity JOIN MedicationEntity " +
+                "ON MedicationEntity.id = ReminderEntity.pill_id"
+    )
+    suspend fun getDrugWithReminderListS(): List<ReminderWithMedication>
 
 
 }

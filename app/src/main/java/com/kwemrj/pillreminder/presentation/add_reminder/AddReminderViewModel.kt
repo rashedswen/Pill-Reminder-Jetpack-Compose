@@ -1,13 +1,18 @@
 package com.kwemrj.pillreminder.presentation.add_reminder
 
+import android.app.Application
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.kwemrj.pillreminder.PillApplication
+import com.kwemrj.pillreminder.core.removeAlarm
+import com.kwemrj.pillreminder.core.setAlarm
 import com.kwemrj.pillreminder.data.local.entity.MedicationEntity
 import com.kwemrj.pillreminder.domain.use_cases.MedicationUseCases
 import com.kwemrj.pillreminder.presentation.add_reminder.util.IntervalInTimes
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.*
@@ -16,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AddReminderViewModel @Inject constructor(
     private val useCases: MedicationUseCases,
-) : ViewModel() {
+    application: Application
+) : AndroidViewModel(application) {
 
     private val _state = MutableStateFlow(AddReminderStates())
     val state: StateFlow<AddReminderStates> = _state
@@ -26,6 +32,8 @@ class AddReminderViewModel @Inject constructor(
 
     private val _timesList = mutableStateListOf<Long>()
     val timesList: List<Long> = _timesList
+
+    private val context = getApplication<PillApplication>().applicationContext
 
 
     fun onEvent(event: AddReminderEvents) {
@@ -54,7 +62,7 @@ class AddReminderViewModel @Inject constructor(
                 Log.d("List", state.value.times.toList().toString())
             }
             is AddReminderEvents.SaveMedicineReminder -> {
-                viewModelScope.launch {
+                viewModelScope.launch(Dispatchers.Main) {
                     val medicine = state.value
                     useCases.insertMedicineWithDatesUseCase(
                         MedicationEntity(
@@ -73,6 +81,20 @@ class AddReminderViewModel @Inject constructor(
                         times = medicine.times,
                         intervalInTimes = state.value.intervalInTimes
                     )
+                    val c = useCases.drugWithReminderListUseCase()
+                    Log.d("eee", c.toString())
+                    _state.update {
+                        it.copy(
+                            drugReminders = c
+                        )
+                    }
+                    state.value.drugReminders.filter { it.time >= Calendar.getInstance().timeInMillis }
+                        .forEach { drugReminder ->
+                            removeAlarm(drugReminder, context)
+                            setAlarm(drugReminder, context)
+                            Log.d("ds", drugReminder.toString())
+                        }
+                    Log.d("heee", state.value.drugReminders.toString())
 
                 }
             }
@@ -96,9 +118,9 @@ class AddReminderViewModel @Inject constructor(
                         _timesList.removeRange(0, timesList.lastIndex)
                     }
                     var intervalBetweenDosesByIntervalType = ""
-                    if (state.value.intervalInTimes == IntervalInTimes.SpecificHourOfDay){
+                    if (state.value.intervalInTimes == IntervalInTimes.SpecificHourOfDay) {
                         intervalBetweenDosesByIntervalType = "24"
-                    } else if (state.value.intervalInTimes == IntervalInTimes.EveryXHour){
+                    } else if (state.value.intervalInTimes == IntervalInTimes.EveryXHour) {
                         intervalBetweenDosesByIntervalType = state.value.intervalBetweenDoses
                     }
                     it.copy(
@@ -114,7 +136,6 @@ class AddReminderViewModel @Inject constructor(
     private fun checkFields() {
 
     }
-
 
     sealed class AddReminderUiEvents {}
 

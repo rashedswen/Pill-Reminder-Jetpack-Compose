@@ -50,7 +50,8 @@ object AppModule {
             getReminderListUseCase = GetReminderListUseCase(repository),
             getDrugWithReminderListUseCase = GetDrugWithReminderListUseCase(repository),
             updateReminderUseCase = UpdateReminderUseCase(repository),
-            getReminderUseCase = GetReminderUseCase(repository)
+            getReminderUseCase = GetReminderUseCase(repository),
+            drugWithReminderListUseCase = DrugWithReminderListUseCase(repository)
         )
     }
 

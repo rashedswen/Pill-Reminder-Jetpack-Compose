@@ -32,6 +32,7 @@ fun ReminderDialog(
     onDismissRequest: () -> Unit,
     onSkipRequest: (ReminderWithMedication) -> Unit,
     onTakeRequest: (ReminderWithMedication) -> Unit,
+    onInfoClicked : () -> Unit
 ) {
     Dialog(
         onDismissRequest = { onDismissRequest() },
@@ -49,7 +50,10 @@ fun ReminderDialog(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-                Icon(imageVector = Icons.Outlined.Info, contentDescription = null)
+                Icon(imageVector = Icons.Outlined.Info, contentDescription = "Info", modifier = Modifier.clickable {
+                    onInfoClicked()
+                    onDismissRequest()
+                })
                 Spacer(modifier = Modifier.size(12.dp))
                 Icon(
                     modifier = Modifier.clickable {
@@ -84,9 +88,11 @@ fun ReminderDialog(
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
                 Column(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
                         .clickable {
-                                   onSkipRequest(reminder)
+                            onSkipRequest(reminder)
+                            onDismissRequest()
                         },
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -104,9 +110,11 @@ fun ReminderDialog(
                 }
 
                 Column(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
                         .clickable {
-                                   onTakeRequest(reminder)
+                            onTakeRequest(reminder)
+                            onDismissRequest()
                         },
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {

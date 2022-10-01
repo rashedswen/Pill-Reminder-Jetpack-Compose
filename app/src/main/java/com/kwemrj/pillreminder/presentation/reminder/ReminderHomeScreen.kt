@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kwemrj.pillreminder.core.nav_graph.ADD_EDIT_ROUTE
+import com.kwemrj.pillreminder.core.nav_graph.Screen
 import com.kwemrj.pillreminder.data.local.entity.ReminderWithMedication
 import com.kwemrj.pillreminder.presentation.reminder.component.DaySectionCard
 import com.kwemrj.pillreminder.presentation.reminder.component.ReminderDialog
@@ -30,7 +31,6 @@ fun ReminderHomeScreen(
 
     val state = viewModel.state.collectAsState()
     val listOfDays = viewModel.listOfDays
-
 
     var showMedicationDialog by remember { mutableStateOf(false) }
     var medicationDialogItem by remember { mutableStateOf<ReminderWithMedication?>(null) }
@@ -51,7 +51,11 @@ fun ReminderHomeScreen(
                 {
                     showMedicationDialog = false
                     medicationDialogItem = null
-                })
+                },
+                onInfoClicked = {
+                    navController.navigate(Screen.MedicineDetails.route)
+                }
+            )
     }
 
     Scaffold(

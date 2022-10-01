@@ -6,11 +6,14 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.kwemrj.pillreminder.core.sendNotification
+import com.kwemrj.pillreminder.data.local.entity.ReminderWithMedication
 
-class ReminderBroadcast : BroadcastReceiver() {
+class ReminderReceiver : BroadcastReceiver() {
 
 
     override fun onReceive(context: Context?, intent: Intent?) {
+
+        val drugReminder = intent?.getSerializableExtra("drug_reminder") as ReminderWithMedication
 
         val notificationManager = context?.let {
             ContextCompat.getSystemService(
@@ -19,7 +22,11 @@ class ReminderBroadcast : BroadcastReceiver() {
             ) as NotificationManager
         }
 
-        notificationManager?.sendNotification(messageBody = "Notification Working", context)
+        notificationManager?.sendNotification(
+            messageBody = "Notification Working",
+            context,
+            drugReminder
+        )
 
     }
 

@@ -1,5 +1,6 @@
 package com.kwemrj.pillreminder.data.repository
 
+import androidx.compose.ui.platform.LocalContext
 import com.kwemrj.pillreminder.data.local.PillDao
 import com.kwemrj.pillreminder.data.local.entity.MedicationEntity
 import com.kwemrj.pillreminder.data.local.entity.ReminderEntity
@@ -28,6 +29,10 @@ class PillRepositoryImpl(
 
     override suspend fun updateReminder(reminder : ReminderEntity) {
         dao.updateReminder(reminder)
+    }
+
+    override suspend fun listOfMedicationsWithReminders(): List<ReminderWithMedication> {
+        return dao.getDrugWithReminderListS()
     }
 
     override fun getListOfMedications(): Flow<List<MedicationEntity>> {

@@ -17,11 +17,11 @@ class InsertMedicineWithDatesUseCase(
         if(intervalInTimes != IntervalInTimes.AsNeeded) {
             repository.insertReminders(
                 getListOfReminderDates(
-                    medicationId,
-                    times,
-                    medicationEntity.endDate,
-                    medicationEntity.intervalBetweenDoses,
-                    medicationEntity.startDate,
+                    id = medicationId,
+                    times = times,
+                    endDate = medicationEntity.endDate,
+                    interval = medicationEntity.intervalBetweenDoses,
+                    startDate = medicationEntity.startDate,
                 )
             )
         }

@@ -5,5 +5,6 @@ data class MedicationUseCases(
     val getReminderListUseCase: GetReminderListUseCase,
     val getDrugWithReminderListUseCase: GetDrugWithReminderListUseCase,
     val updateReminderUseCase: UpdateReminderUseCase,
-    val getReminderUseCase: GetReminderUseCase
+    val getReminderUseCase: GetReminderUseCase,
+    val drugWithReminderListUseCase: DrugWithReminderListUseCase
 )
