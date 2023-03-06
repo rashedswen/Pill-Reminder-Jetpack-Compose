@@ -10,5 +10,7 @@ data class ReminderWithMedication(
     val drugName : String,
     val takeStatus : TakeStatus,
     val medicationForm: MedicationForm,
-    val time : Long
+    val time : Long,
+    val inventory : Int,
+    val isNotificationOn: Boolean,
 ) : Serializable

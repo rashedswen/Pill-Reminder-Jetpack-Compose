@@ -60,7 +60,7 @@ fun MedicationFormSection(
                 ) {
                     Icon(
                         painter = formIcon,
-                        contentDescription = null,
+                        contentDescription = "form",
                         modifier = Modifier.size(36.dp),
                         tint = Color(
                             0xFF4A85FA

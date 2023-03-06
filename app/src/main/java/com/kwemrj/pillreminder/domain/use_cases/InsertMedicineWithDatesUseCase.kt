@@ -1,48 +1,60 @@
 package com.kwemrj.pillreminder.domain.use_cases
 
+import android.util.Log
+import androidx.core.os.BuildCompat
 import com.kwemrj.pillreminder.core.Constants.HOUR_IN_MILLIS
 import com.kwemrj.pillreminder.core.enums.TakeStatus
 import com.kwemrj.pillreminder.data.local.entity.MedicationEntity
 import com.kwemrj.pillreminder.data.local.entity.ReminderEntity
 import com.kwemrj.pillreminder.domain.repository.PillRepository
 import com.kwemrj.pillreminder.presentation.add_reminder.util.IntervalInTimes
-import java.util.*
+import java.util.Calendar
+import kotlin.time.Duration.Companion.hours
 
 class InsertMedicineWithDatesUseCase(
     private val repository: PillRepository
 ) {
 
-    suspend operator fun invoke(medicationEntity: MedicationEntity, times: List<Long>, intervalInTimes: IntervalInTimes) {
+    suspend operator fun invoke(
+        medicationEntity: MedicationEntity,
+        times: List<Long>,
+        intervalInTimes: IntervalInTimes
+    ) {
         val medicationId = repository.insertMedication(medicationEntity)
-        if(intervalInTimes != IntervalInTimes.AsNeeded) {
+        if (intervalInTimes != IntervalInTimes.AsNeeded) {
             repository.insertReminders(
                 getListOfReminderDates(
                     id = medicationId,
                     times = times,
-                    endDate = medicationEntity.endDate,
+                    endDate = medicationEntity.endDate.setToStartOfDay(),
                     interval = medicationEntity.intervalBetweenDoses,
-                    startDate = medicationEntity.startDate,
+                    startDate = medicationEntity.startDate.setToStartOfDay(),
                 )
             )
         }
     }
 
+    private fun Long.setToStartOfDay() : Long{
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = this
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
+        calendar.set(year, month, dayOfMonth,0,0,0)
+        return calendar.timeInMillis
+    }
     private fun getListOfReminderDates(
         id: Int,
         times: List<Long>,
         endDate: Long,
         interval: Int,
-        startDate : Long,
-    ): List<ReminderEntity> {
+        startDate: Long
+    ): MutableList<ReminderEntity> {
         val reminderList = mutableListOf<ReminderEntity>()
         val intervalBetweenDosesInMillis = interval * HOUR_IN_MILLIS
-        for (i in times){
-            var newTime = i + startDate
-            var isFirstTime = true
+        for (time in times) {
+            var newTime = time + startDate
             while (newTime <= endDate) {
-                if (!isFirstTime){
-                    newTime += intervalBetweenDosesInMillis
-                }
                 reminderList.add(
                     ReminderEntity(
                         pill_id = id,
@@ -54,12 +66,10 @@ class InsertMedicineWithDatesUseCase(
                         }
                     )
                 )
-
-                isFirstTime = false
+                newTime += intervalBetweenDosesInMillis
             }
         }
-
-        return reminderList.toList()
+        return reminderList
     }
 
 }

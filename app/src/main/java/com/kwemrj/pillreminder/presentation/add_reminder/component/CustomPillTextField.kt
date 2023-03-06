@@ -1,5 +1,6 @@
 package com.kwemrj.pillreminder.presentation.add_reminder.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -20,7 +21,7 @@ fun PillCustomTextField(
     text: String = "",
     value: String = "",
     onValueChange: (value: String) -> Unit,
-    keyboardType: KeyboardType = KeyboardType.Text
+    keyboardType: KeyboardType = KeyboardType.Text,
 ) {
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(),
@@ -39,7 +40,11 @@ fun PillCustomTextField(
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         trailingIcon = {
             if (value.isNotEmpty()) {
-                Icon(imageVector = Icons.Default.Clear, contentDescription = null)
+                Icon(imageVector = Icons.Default.Clear,
+                    contentDescription = null,
+                    modifier = Modifier.clickable {
+                        onValueChange("")
+                    })
             }
         }
     )

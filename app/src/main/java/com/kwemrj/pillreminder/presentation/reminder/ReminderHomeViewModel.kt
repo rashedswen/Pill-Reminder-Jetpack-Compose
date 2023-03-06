@@ -10,6 +10,7 @@ import com.kwemrj.pillreminder.domain.use_cases.MedicationUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import java.util.*
 import javax.inject.Inject
 
@@ -34,9 +35,11 @@ class ReminderHomeViewModel @Inject constructor(
             it.copy(selectedDay = calendar.timeInMillis)
         }
         daysList()
-        getReminderListForDay()
+        getReminderListForSelectedDay()
         changeOldRemindersToMissed()
     }
+
+
 
     fun onEvent(event: ReminderHomeEvents) {
         when (event) {
@@ -46,7 +49,7 @@ class ReminderHomeViewModel @Inject constructor(
                 }
                 Log.d("Calendar Day", event.startOfDay.toString())
 
-                getReminderListForDay()
+                getReminderListForSelectedDay()
             }
             is ReminderHomeEvents.ReminderDetails -> {
                 viewModelScope.launch {
@@ -57,7 +60,7 @@ class ReminderHomeViewModel @Inject constructor(
                 viewModelScope.launch {
                     useCases.updateReminderUseCase(
                         reminder = reminder!!.copy(
-                            takeStatus = TakeStatus.Skipped
+                            takeStatus = TakeStatus.Skipped,
                         )
                     )
                 }
@@ -99,7 +102,7 @@ class ReminderHomeViewModel @Inject constructor(
 
     }
 
-    private fun getReminderListForDay() {
+    private fun getReminderListForSelectedDay() {
         useCases.getDrugWithReminderListUseCase()
             .onEach { listOfReminders ->
                 _state.update {

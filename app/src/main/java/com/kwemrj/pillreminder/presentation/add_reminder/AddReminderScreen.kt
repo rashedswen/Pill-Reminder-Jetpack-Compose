@@ -1,13 +1,43 @@
 package com.kwemrj.pillreminder.presentation.add_reminder
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -18,6 +48,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kwemrj.pillreminder.presentation.add_reminder.component.DateSelectSection
@@ -25,7 +56,8 @@ import com.kwemrj.pillreminder.presentation.add_reminder.component.MedicationFor
 import com.kwemrj.pillreminder.presentation.add_reminder.component.PillCustomTextField
 import com.kwemrj.pillreminder.presentation.add_reminder.component.TimeSection
 import com.kwemrj.pillreminder.presentation.add_reminder.util.IntervalInTimes
-import java.util.*
+import com.kwemrj.pillreminder.ui.theme.Blue700
+import java.util.Calendar
 
 @Composable
 fun AddReminderScreen(
@@ -38,6 +70,18 @@ fun AddReminderScreen(
     val state = viewModel.state.collectAsState()
 
     val context = LocalContext.current
+//    val hasNotificationPermission by remember {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//            mutableStateOf(
+//                ContextCompat.checkSelfPermission(
+//                    context,
+//                    Manifest.permission.POST_NOTIFICATIONS
+//                ) == PackageManager.PERMISSION_GRANTED
+//            )
+//        } else {
+//            mutableStateOf(true)
+//        }
+//    }
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -115,7 +159,7 @@ fun AddReminderScreen(
                     },
                     text = "Number of doses",
                     value = state.value.medicationNumberOfDoses,
-                    keyboardType = KeyboardType.Decimal
+                    keyboardType = KeyboardType.Decimal,
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -228,13 +272,14 @@ fun AddReminderScreen(
 
                 Spacer(modifier = Modifier.size(8.dp))
 
-                Button(modifier = Modifier.align(Alignment.CenterHorizontally), onClick = {
-                    viewModel.onEvent(AddReminderEvents.SaveMedicineReminder)
-
-                    navController.popBackStack()
-
-
-                }) {
+                Button(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Blue700),
+                    onClick = {
+                        viewModel.onEvent(AddReminderEvents.SaveMedicineReminder)
+                        navController.popBackStack()
+                    }) {
                     Text(text = "Save")
                 }
 

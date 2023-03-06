@@ -1,8 +1,13 @@
 package com.kwemrj.pillreminder.core.nav_graph
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import com.kwemrj.pillreminder.presentation.reminder_details.ReminderDetailsScreen
 
 @Composable
 fun SetupNavGraph(
@@ -16,5 +21,18 @@ fun SetupNavGraph(
     ) {
         addNavGraph(navController)
         homeNavGraph(navController)
+        composable(
+            route = Screen.MedicineDetails.route,
+            arguments = listOf(
+                navArgument(DETAIL_ARGUMENT_REMINDER) {
+                    type = NavType.IntType
+                }
+            )
+        ) {
+            Log.d("reminder it", it.arguments?.getInt(DETAIL_ARGUMENT_REMINDER).toString())
+            ReminderDetailsScreen(
+                navController = navController,
+            )
+        }
     }
 }

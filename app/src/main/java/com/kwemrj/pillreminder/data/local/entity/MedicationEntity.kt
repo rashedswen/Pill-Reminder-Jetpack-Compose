@@ -17,10 +17,20 @@ data class MedicationEntity(
     val status: MedicineStatus = MedicineStatus.Active,
     val startDate: Long,
     val endDate: Long,
+    val isNotificationOn: Boolean = true
 ) {
     fun toMedication(): Medication {
         return Medication(
-            id, name, form, intervalBetweenDoses, inventory, dosesPerTime,status, startDate, endDate
+            id,
+            name,
+            form,
+            intervalBetweenDoses,
+            inventory,
+            dosesPerTime,
+            status,
+            startDate,
+            endDate,
+            isNotificationOn
         )
     }
 }

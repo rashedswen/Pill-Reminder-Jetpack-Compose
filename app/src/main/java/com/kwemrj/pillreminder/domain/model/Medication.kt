@@ -13,4 +13,5 @@ data class Medication(
     val status : MedicineStatus = MedicineStatus.Active,
     val startDate : Long,
     val endDate : Long,
+    val isNotificationOn : Boolean = true
 )

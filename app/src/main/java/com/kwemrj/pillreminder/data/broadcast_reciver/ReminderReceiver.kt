@@ -23,7 +23,7 @@ class ReminderReceiver : BroadcastReceiver() {
         }
 
         notificationManager?.sendNotification(
-            messageBody = "Notification Working",
+            messageBody = "it's time for get ${drugReminder.drugName} ",
             context,
             drugReminder
         )

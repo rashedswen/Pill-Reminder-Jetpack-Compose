@@ -52,7 +52,7 @@ fun ReminderDialog(
             ) {
                 Icon(imageVector = Icons.Outlined.Info, contentDescription = "Info", modifier = Modifier.clickable {
                     onInfoClicked()
-                    onDismissRequest()
+//                    onDismissRequest()
                 })
                 Spacer(modifier = Modifier.size(12.dp))
                 Icon(
@@ -132,22 +132,22 @@ fun ReminderDialog(
                 }
 
 
-                Column(
-                    modifier = Modifier.weight(1f),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Alarm,
-                        contentDescription = null,
-                        tint = Color.Black,
-                        modifier = Modifier
-                            .background(Color.LightGray, shape = RoundedCornerShape(4.dp))
-                            .size(40.dp)
-                            .padding(2.dp)
-                    )
-                    Spacer(modifier = Modifier.size(4.dp))
-                    Text(text = "Reschedule", style = MaterialTheme.typography.body2)
-                }
+//                Column(
+//                    modifier = Modifier.weight(1f),
+//                    horizontalAlignment = Alignment.CenterHorizontally
+//                ) {
+//                    Icon(
+//                        imageVector = Icons.Default.Alarm,
+//                        contentDescription = null,
+//                        tint = Color.Black,
+//                        modifier = Modifier
+//                            .background(Color.LightGray, shape = RoundedCornerShape(4.dp))
+//                            .size(40.dp)
+//                            .padding(2.dp)
+//                    )
+//                    Spacer(modifier = Modifier.size(4.dp))
+//                    Text(text = "Reschedule", style = MaterialTheme.typography.body2)
+//                }
 
 
             }

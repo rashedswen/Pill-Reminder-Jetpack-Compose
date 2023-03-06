@@ -51,7 +51,12 @@ object AppModule {
             getDrugWithReminderListUseCase = GetDrugWithReminderListUseCase(repository),
             updateReminderUseCase = UpdateReminderUseCase(repository),
             getReminderUseCase = GetReminderUseCase(repository),
-            drugWithReminderListUseCase = DrugWithReminderListUseCase(repository)
+            drugWithReminderListUseCase = DrugWithReminderListUseCase(repository),
+            getDrugWithReminderDetailsUseCase = GetDrugWithReminderDetailsUseCase(repository),
+            getMedicationListUseCase = GetMedicationListUseCase(repository),
+            deleteMedicineWithDatesUseCase = DeleteMedicineWithDatesUseCase(repository),
+            updateMedicationNotificationUseCase = UpdateMedicationNotificationUseCase(repository),
+            getMedicationUseCase = GetMedicationUseCase(repository)
         )
     }
 
